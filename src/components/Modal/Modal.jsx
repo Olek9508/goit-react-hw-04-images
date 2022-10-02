@@ -1,41 +1,38 @@
-import { Component } from "react";
+import { useEffect } from "react";
 import PropTypes from "prop-types";
 import { Overlay,ModalStyled } from "./Modal.styled";
 
-export class Modal extends Component{
-  static propTypes = {
-    onBackdrop: PropTypes.func.isRequired,
-    content: PropTypes.string.isRequired,
-  };
+export function Modal({ content, onBackdrop }) {
+  
+  useEffect(() => {
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  });
 
-    componentDidMount() { 
-        window.addEventListener("keydown",this.onKeyDown)
-    }
-    
-    componentWillUnmount() {
-        window.removeEventListener("keydown",this.onKeyDown)
-    }
-
-  onKeyDown = (event) => {
+  const onKeyDown = (event) => {
     if (event.code === "Escape") {
-      this.props.onBackdrop();
+      onBackdrop();
     }
   };
 
-  handleBackdropClick = (e) => {
+  const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget) {
-      this.props.onBackdrop();
+      onBackdrop();
     }
   };
 
-    render() {
-    const { content } = this.props;
-        return (
-    <Overlay onClick={this.handleBackdropClick}>
+  return (
+    <Overlay onClick={handleBackdropClick}>
         <ModalStyled>
           <img src={content} alt="" />
         </ModalStyled>
     </Overlay>
-        )
-    }
+  )
+}
+
+Modal.propTypes = {
+  onBackdrop: PropTypes.func.isRequired,
+  content: PropTypes.string.isRequired,
 }
