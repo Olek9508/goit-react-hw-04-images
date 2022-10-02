@@ -37,6 +37,10 @@ export function App() {
     setIsLoading(!isLoading);
   };
 
+   const stopToggleLoading = () => {
+    setIsLoading(isLoading);
+  };
+
   const hadleChangeQuery = (query) => {
     if (searchQuery !== query) {
     setSearchQuery(query);
@@ -64,6 +68,7 @@ export function App() {
 
   const dataGet = () => {
     if (searchQuery !== "" || page !== 1) {
+      toggleLoading();
       fetchItems(searchQuery, page)
         .then(({ hits }) => {
           if (hits.length === 0) {
@@ -75,7 +80,7 @@ export function App() {
           // Notify.success(`Congradulations! Here are results, that we found for your "${searchQuery}" request`)
         })
         .catch((error) => console.log(error.message))
-        // .finally(toggleLoading)
+        .finally(()=> stopToggleLoading())
     };
   }
   
