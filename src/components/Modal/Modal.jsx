@@ -5,17 +5,18 @@ import { Overlay,ModalStyled } from "./Modal.styled";
 export function Modal({ content, onBackdrop }) {
   
   useEffect(() => {
-    window.addEventListener("keydown", onKeyDown);
-    return () => {
-      window.removeEventListener("keydown", onKeyDown);
-    };
-  });
-
-  const onKeyDown = (event) => {
+    const onKeyDown = (event) => {
     if (event.code === "Escape") {
       onBackdrop();
     }
   };
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [onBackdrop]);
+
+
 
   const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget) {
